@@ -7,17 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    {% block title %}
-        <title>{{ title }}</title>
-    {% endblock %}
+
+    <title>GeekShop</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    {% block css %}
-
-    {% endblock %}
+    <link href="/static/css/index.css" rel="stylesheet">
 
 </head>
 
@@ -58,13 +55,24 @@
 </nav>
 
 <!-- Page Content -->
-{% block content %}
-
-{% endblock %}
-
-{% block footer %}
-
-{% endblock %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1 class="mt-5">GeekShop Store</h1>
+                <p>
+                    Новые образы и лучшие бренды на GeekShop Store.
+                    Бесплатная доставка по всему миру! Аутлет: до -70% Собственный бренд. -20% новым покупателям.
+                </p>
+                <button id="start-purchase-btn" type="button" class="btn btn-lg">
+                    <a id="start-purchase-link" href="products.html">
+                        Начать покупки
+                    </a>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Bootstrap core JavaScript -->
 <script src="/static/vendor/jquery/jquery.min.js"></script>
