@@ -44,14 +44,17 @@ def register(request):
     }
     return render(request, 'authapp/register.html', context)
 
+
 @login_required
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(instance=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
+            messages.set_level(request, messages.SUCCESS)
             messages.success(request, 'Изменения сохранены')
             form.save()
         else:
+            messages.set_level(request, messages.ERROR)
             messages.error(request, form.errors)
 
     context = {
