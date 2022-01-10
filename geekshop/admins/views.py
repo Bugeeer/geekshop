@@ -5,7 +5,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse
 
-from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryUpdateFormAdmin
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryUpdateFormAdmin, ProductUpdateFormAdmin
 from authapp.models import User
 from mainapp.models import ProductCategory, Product
 
@@ -84,7 +84,7 @@ def categories_create(request):
             form.save()
             return HttpResponseRedirect(reverse('admins:categories'))
     else:
-        form = UserAdminRegisterForm()
+        form = CategoryUpdateFormAdmin()
     context = {
         'title': 'Geekshop - Админ | Создание категории',
         'form': form
@@ -118,9 +118,52 @@ def categories_delete(request, pk):
     return HttpResponseRedirect(reverse('admins:categories'))
 
 
+# Product
 @user_passes_test(lambda u: u.is_superuser)
 def products(request):
     context = {
         'products': Product.objects.all()
     }
     return render(request, 'admins/admin-product-read.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def products_create(request):
+    if request.method == 'POST':
+        form = ProductUpdateFormAdmin(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:products'))
+    else:
+        form = ProductUpdateFormAdmin()
+    context = {
+        'title': 'Geekshop - Админ | Создание продукта',
+        'form': form
+    }
+    return render(request, 'admins/admin-product-create.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def products_update(request, pk):
+    product_select = Product.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ProductUpdateFormAdmin(data=request.POST, instance=product_select, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:products'))
+    else:
+        form = ProductUpdateFormAdmin(instance=product_select)
+    context = {
+        'title': 'Geekshop - Админ | Обновление продукта',
+        'form': form,
+        'product_select': product_select,
+    }
+    return render(request, 'admins/admin-product-update-delete.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def products_delete(request, pk):
+    if request.method == 'POST':
+        category = Product.objects.get(pk=pk)
+        category.delete()
+    return HttpResponseRedirect(reverse('admins:products'))
