@@ -112,28 +112,10 @@ class ProductCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
 
 class ProductUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     model = Product
-    template_name = 'admins/admin-category-update-delete.html'
+    template_name = 'admins/admin-product-update-delete.html'
     form_class = ProductUpdateFormAdmin
-    success_url = reverse_lazy('admins:categories')
+    success_url = reverse_lazy('admins:products')
     title = 'Админ | Изменение продукта'
-
-
-# @user_passes_test(lambda u: u.is_superuser)
-# def products_update(request, pk):
-#     product_select = Product.objects.get(pk=pk)
-#     if request.method == 'POST':
-#         form = ProductUpdateFormAdmin(data=request.POST, instance=product_select, files=request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect(reverse('admins:products'))
-#     else:
-#         form = ProductUpdateFormAdmin(instance=product_select)
-#     context = {
-#         'title': 'Geekshop - Админ | Обновление продукта',
-#         'form': form,
-#         'product_select': product_select,
-#     }
-#     return render(request, 'admins/admin-product-update-delete.html', context)
 
 
 class ProductDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
