@@ -1,2 +1,2 @@
-http://194.67.111.115
-http://194.67.111.115/products/
+http://194.67.111.115/user/login/ POST username=buger&password=1
+http://194.67.111.115/users/profile/
