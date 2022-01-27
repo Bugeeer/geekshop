@@ -1,0 +1,7 @@
+http://194.67.111.115
+http://194.67.111.115/products/
+http://194.67.111.115/products/category/4/
+http://194.67.111.115/users/profile/
+http://194.67.111.115/orders/
+http://194.67.111.115/orders/update/1/
+http://194.67.111.115/orders/read/1/
