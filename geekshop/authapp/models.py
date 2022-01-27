@@ -11,7 +11,7 @@ from django.utils.timezone import now
 
 
 class User(AbstractUser):
-    image = models.ImageField(upload_to='users_image/', blank=True)
+    image = models.ImageField(upload_to='users_image', blank=True)
     age = models.PositiveIntegerField(default=18)
 
     activation_key = models.CharField(max_length=128, blank=True)
