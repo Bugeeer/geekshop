@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.db import connection
+from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -11,6 +13,12 @@ from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryUp
 from authapp.models import User
 from mainapp.mixin import CustomDispatchMixin, BaseClassContextMixin, UserDispatchMixin
 from mainapp.models import ProductCategory, Product
+
+
+def db_profile_by_type(prefix, type, queries):
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    print(f'db_profile {type} for {prefix}')
+    [print(query['sql']) for query in update_queries]
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -79,6 +87,15 @@ class CategoryUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin)
     success_url = reverse_lazy('admins:categories')
     title = 'Админ | Изменение категории'
 
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                print(f'Применяется скидка {discount}% к товарам категории {self.object.name}')
+                self.object.product_set.update(price=F('price')*(1-discount/100))
+                db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
+        return HttpResponseRedirect(self.get_success_url())
+
 
 class CategoryDeleteView(DeleteView, CustomDispatchMixin):
     model = ProductCategory
@@ -89,8 +106,10 @@ class CategoryDeleteView(DeleteView, CustomDispatchMixin):
         self.object = self.get_object()
         if self.object.is_active:
             self.object.is_active = False
+            self.object.product_set.update(is_active=False)
         else:
             self.object.is_active = True
+            self.object.product_set.update(is_active=True)
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 

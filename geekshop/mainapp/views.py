@@ -59,9 +59,9 @@ def products(request, id_category=None, page=1):
         'title': 'Geekshop | Catalog'
     }
     if id_category:
-        products = Product.objects.filter(category_id=id_category).select_related('category')
+        products = Product.objects.filter(category_id=id_category).select_related('category').order_by('id')
     else:
-        products = Product.objects.all().select_related('category')
+        products = Product.objects.all().select_related('category').order_by('id')
 
     # products = get_link_product()
 
