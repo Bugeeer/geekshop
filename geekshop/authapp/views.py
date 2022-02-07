@@ -19,6 +19,15 @@ class LoginListView(LoginView, BaseClassContextMixin):
     form_class = UserLoginForm
     title = 'Geekshop | Login'
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            context = {
+                'form': self.form_class
+            }
+            return render(request, self.template_name, context)
+
 
 class RegisterListView(FormView, BaseClassContextMixin):
     model = User
